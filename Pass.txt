@@ -1,0 +1,3 @@
+ansel  70  80  76
+brian  100  100  100
+tumeric  0  100  60
