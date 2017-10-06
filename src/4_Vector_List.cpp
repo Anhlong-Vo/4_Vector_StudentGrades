@@ -6,24 +6,15 @@
 // Description : Hello World in C++, Ansi-style
 //============================================================================
 
-#include <iostream>
-#include "utilities.h"
+//#include <iostream>
+#include <fstream>
+#include "../includes/constants.h"
+#include "../includes/utilities.h"
 
 using namespace std;
-const int 			USER_CHOSE_TO_EXIT 				= -1;
-const int 			COULD_NOT_OPEN_FILE				= -2;
-const int 			COULD_NOT_READ_FILE_INTO_VECTOR = -3;
-const int 			SUCCESS			 				=  0;
-const std::string 	ALL_FILE 						= "TestData.txt";
-const std::string 	PASS_FILE 						= "Pass.txt";
-const std::string 	FAIL_FILE 						= "Fail.txt";
-
-ifstream 											myInFile;
-
-vector<studentData> 								allstudentData;
-vector<studentData> 								failstudentData;
 
 int main() {
+	ifstream myInFile;
 
 	//open file
 	myInFile.open(ALL_FILE.c_str());
@@ -31,7 +22,7 @@ int main() {
 		return COULD_NOT_OPEN_FILE;
 
 	//read file into vector, calculate final grade
-	if (!readFileIntoVector(myInFile,allstudentData))
+	if (!readFileIntoVector(myInFile))
 		return COULD_NOT_READ_FILE_INTO_VECTOR;
 
 	//close file
@@ -39,15 +30,19 @@ int main() {
 		myInFile.close();
 
 	//calculate final grade
-	calculateFinalGrade(allstudentData);
+	calculateFinalGrade();
 
 	//strip out failing students and add to fail.txt
-	extractFailingStudents(allstudentData, failstudentData);
+	extractFailingStudents();
 
 	//save failing students to other file
-	writeDataToFile(PASS_FILE,allstudentData);
-	writeDataToFile(FAIL_FILE,failstudentData);
+	if (!writeDataToFile(PASS,PASS_FILE))
+		return COULD_NOT_WRITE_VECTOR_TO_FILE;
 
+	if (!writeDataToFile(FAIL,FAIL_FILE))
+		return COULD_NOT_WRITE_VECTOR_TO_FILE;
+
+	return SUCCESS;
 }
 
 

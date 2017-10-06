@@ -1,11 +1,20 @@
-
-#include "utilities.h"
+#include <fstream>
+#include <iostream>
+#include <sstream>
+#include <string>
+#include <vector>
 #include <list>
-#include "stdlib.h"
+#include <stdlib.h>
+
+#include "../includes/constants.h"
+#include "../includes/utilities.h"
 
 using namespace std;
 
-bool readFileIntoVector(ifstream &file, vector<studentData> &myData) {
+vector<studentData> 								allstudentData;
+vector<studentData> 								failstudentData;
+
+bool readFileIntoVector(ifstream &file) {
 	bool retValue = true;	//assume best
 
 	std::string line;
@@ -37,44 +46,33 @@ bool readFileIntoVector(ifstream &file, vector<studentData> &myData) {
 		myStudentData.final = stringToInt(token.c_str());
 
 		//finally add to array
-		myData.push_back(myStudentData);
+		allstudentData.push_back(myStudentData);
 
 		//clear stream so it will work for next read
 		ss.clear();
 	}
 	return retValue;
 }
-void dontModifyReferenceORcopyVector(const vector<studentData> &myData){
-	//if pass by value (no &) original vector will not be modified by
-	//this function. But you have to copy it, potentially very expensive
-	//If you pass as a const & then you get best of both worlds
-	//compiler enforced gurantee that myData will not change and
-	//you do not have to pay for the copy
-}
 
-void calculateFinalGrade(vector<studentData> &myData) {
-	//using the [] way
-	for (int var = 0; var < myData.size(); ++var) {
-		myData[var].classgrade = 0.4 * myData[var].midterm 	+ 0.6 * myData[var].final;
-	}
 
-	//using [] way
-	for ( int i = 0; i != myData.size()-1; ++i ){
-		myData[i].classgrade = 0.4 * myData[i].midterm 	+ 0.6 * myData[i].final;
-	}
+void calculateFinalGrade() {
+//	//using the [] way
+//	for (int var = 0; var < allstudentData.size(); ++var) {
+//		allstudentData[var].classgrade = 0.4 * allstudentData[var].midterm 	+ 0.6 * allstudentData[var].final;
+//	}
 
 	//iterator for list
 	std::vector<studentData>::iterator itr;
 
 	//using the iterator way
 	//vector
-	for ( itr = myData.begin(); itr != myData.end(); ++itr ){
+	for ( itr = allstudentData.begin(); itr != allstudentData.end(); ++itr ){
 		(*itr).classgrade = 0.4 * (*itr).midterm 	+ 0.6 * (*itr).final;
 	}
 }
 
   //void extractFailingStudents(vector<studentData> &allstudentData, list<studentData> &failstudentData){
-  void extractFailingStudents(vector<studentData> &allstudentData, vector<studentData> &failstudentData){
+  void extractFailingStudents(){
 	const double FAILGRADE = 60.0;
 
 	//iterate over allstudentData
@@ -91,9 +89,19 @@ void calculateFinalGrade(vector<studentData> &myData) {
 	}
 }
 
+  //forward declaration
+bool writeDataToFile(const std::string outfilename,std::vector<studentData> data);
+bool writeDataToFile(ranking r,const string& outfilename){
+	switch (r){
+	case FAIL:
+		return writeDataToFile(outfilename,failstudentData );
 
-ofstream myfile;
-bool writeDataToFile(const string& outfilename, vector<studentData> &studentData) {
+	case PASS:
+		return writeDataToFile(outfilename,allstudentData);
+	}
+}
+bool writeDataToFile(const std::string outfilename,std::vector<studentData> data) {
+	ofstream myfile;
 	myfile.open(outfilename.c_str());
 	if (!myfile.is_open())
 		return false;
@@ -101,11 +109,11 @@ bool writeDataToFile(const string& outfilename, vector<studentData> &studentData
 //	TODO: sortArray();
 
 	string mydata;
-	for (int var = 0; var < studentData.size(); ++var) {
-		mydata = studentData[var].name + "  " +
-				DoubleToString(studentData[var].midterm) + "  " +
-				DoubleToString(studentData[var].final) + "  " +
-				DoubleToString(studentData[var].classgrade);
+	for (int var = 0; var < data.size(); ++var) {
+		mydata = data[var].name + "  " +
+				DoubleToString(data[var].midterm) + "  " +
+				DoubleToString(data[var].final) + "  " +
+				DoubleToString(data[var].classgrade);
 		myfile<<mydata<<std::endl;
 	}
 
@@ -114,7 +122,6 @@ bool writeDataToFile(const string& outfilename, vector<studentData> &studentData
 
 	return true;
 }
-
 
 //if you are debugging the file must be in the project parent directory
 //in this case Project2 with the .project and .cProject files

@@ -8,11 +8,7 @@
 #ifndef UTILITIES_H_
 #define UTILITIES_H_
 
-#include <fstream>
-#include <iostream>
-#include <sstream>
 #include <string>
-#include <vector>
 
 const double UNINITIALIZED = -1.0;
 struct studentData{
@@ -22,10 +18,13 @@ struct studentData{
 	void clear(){name.clear();midterm=final=classgrade=UNINITIALIZED;}
 };
 
-bool readFileIntoVector(std::ifstream &file, std::vector<studentData> &myData);
-void calculateFinalGrade(std::vector<studentData> &myData);
-void extractFailingStudents(std::vector<studentData> &allstudentData, std::vector<studentData> &failstudentData);
-bool writeDataToFile(const std::string& myfilename, std::vector<studentData>& studentData);
+enum ranking {PASS,FAIL};
+
+bool readFileIntoVector(std::ifstream &file );
+void calculateFinalGrade();
+void extractFailingStudents();
+
+bool writeDataToFile(ranking r, const std::string &filename);
 
 //if myString does not contain a string rep of number returns o
 //if int not large enough has undefined behaviour, very fragile
