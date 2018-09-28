@@ -19,6 +19,8 @@ const std::string 	ALL_FILE 						= "TestData.txt";
 const std::string 	PASS_FILE 						= "Pass.txt";
 const std::string 	FAIL_FILE 						= "Fail.txt";
 
+const double 		FAILGRADE 						= 60.0;
+
 
 
 #endif /* CONSTANTS_H_ */

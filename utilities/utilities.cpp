@@ -72,15 +72,14 @@ void calculateFinalGrade() {
 }
 
   //void extractFailingStudents(vector<studentData> &allstudentData, list<studentData> &failstudentData){
-  void extractFailingStudents(){
-	const double FAILGRADE = 60.0;
-
+  void extractFailingStudents(double failgrade){
+	
 	//iterate over allstudentData
     //std::list<studentData>::iterator 	itr = allstudentData.begin();	//list
     std::vector<studentData>::iterator 	itr = allstudentData.begin();	//vector
 
 	while (itr != allstudentData.end()){
-		if ((*itr).classgrade<FAILGRADE){
+		if ((*itr).classgrade<failgrade){
 			failstudentData.push_back(*itr);
 			itr = allstudentData.erase(itr);	//erase returns updated iter pointing to next element
 		}

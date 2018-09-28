@@ -22,7 +22,7 @@ enum ranking {PASS,FAIL};
 
 bool readFileIntoVector(std::ifstream &file );
 void calculateFinalGrade();
-void extractFailingStudents();
+void extractFailingStudents(double failgrade = FAILGRADE);
 
 bool writeDataToFile(ranking r, const std::string &filename);
 
