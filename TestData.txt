@@ -1,4 +1,4 @@
+tumeric 0 100
+henry 0 0
 ansel 70 80
 brian 100 100
-henry 0 0
-tumeric 0 100

@@ -19,12 +19,16 @@ struct studentData{
 };
 
 enum ranking {PASS,FAIL};
+enum SORT_TYPE{NAME,FINAL_GRADE};
 
 bool readFileIntoVector(std::ifstream &file );
 void calculateFinalGrade();
 void extractFailingStudents(double failgrade = FAILGRADE);
 
 bool writeDataToFile(ranking r, const std::string &filename);
+
+//sorts studentdata based on SORT_TYPE
+bool sortArray(SORT_TYPE st);
 
 //if myString does not contain a string rep of number returns o
 //if int not large enough has undefined behaviour, very fragile

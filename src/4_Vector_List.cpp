@@ -30,6 +30,12 @@ int process_Data(const std::string &infile, const std::string &Passfile, const s
 
 	//calculate final grade
 	calculateFinalGrade();
+	
+	//practice some sorting
+	sortArray(NAME);
+	
+	//why might this one be especially useful?
+	sortArray(FINAL_GRADE);
 
 	//strip out failing students and add to fail.txt
 	extractFailingStudents();

@@ -5,14 +5,15 @@
 #include <vector>
 #include <list>
 #include <stdlib.h>
+#include <algorithm>
 
 #include "../includes/constants.h"
 #include "../includes/utilities.h"
 
 using namespace std;
 
-vector<studentData> 								allstudentData;
-vector<studentData> 								failstudentData;
+vector<studentData> allstudentData;
+vector<studentData> failstudentData;
 
 bool readFileIntoVector(ifstream &file) {
 	bool retValue = true;	//assume best
@@ -54,7 +55,6 @@ bool readFileIntoVector(ifstream &file) {
 	return retValue;
 }
 
-
 void calculateFinalGrade() {
 //	//using the [] way
 //	for (int var = 0; var < allstudentData.size(); ++var) {
@@ -66,40 +66,65 @@ void calculateFinalGrade() {
 
 	//using the iterator way
 	//vector
-	for ( itr = allstudentData.begin(); itr != allstudentData.end(); ++itr ){
-		(*itr).classgrade = 0.4 * (*itr).midterm 	+ 0.6 * (*itr).final;
+	for (itr = allstudentData.begin(); itr != allstudentData.end(); ++itr) {
+		(*itr).classgrade = 0.4 * (*itr).midterm + 0.6 * (*itr).final;
 	}
 }
 
-  //void extractFailingStudents(vector<studentData> &allstudentData, list<studentData> &failstudentData){
-  void extractFailingStudents(double failgrade){
-	
-	//iterate over allstudentData
-    //std::list<studentData>::iterator 	itr = allstudentData.begin();	//list
-    std::vector<studentData>::iterator 	itr = allstudentData.begin();	//vector
+//void extractFailingStudents(vector<studentData> &allstudentData, list<studentData> &failstudentData){
+void extractFailingStudents(double failgrade) {
 
-	while (itr != allstudentData.end()){
-		if ((*itr).classgrade<failgrade){
+	//iterate over allstudentData
+	//std::list<studentData>::iterator 	itr = allstudentData.begin();	//list
+	std::vector<studentData>::iterator itr = allstudentData.begin();	//vector
+
+	while (itr != allstudentData.end()) {
+		if ((*itr).classgrade < failgrade) {
 			failstudentData.push_back(*itr);
-			itr = allstudentData.erase(itr);	//erase returns updated iter pointing to next element
-		}
-		else
+			itr = allstudentData.erase(itr);//erase returns updated iter pointing to next element
+		} else
 			++itr;
 	}
 }
 
-  //forward declaration
-bool writeDataToFile(const std::string outfilename,std::vector<studentData> data);
-bool writeDataToFile(ranking r,const string& outfilename){
-	switch (r){
+//forward declaration
+bool writeDataToFile(const std::string outfilename,
+		std::vector<studentData> data);
+bool writeDataToFile(ranking r, const string& outfilename) {
+	switch (r) {
 	case FAIL:
-		return writeDataToFile(outfilename,failstudentData );
+		return writeDataToFile(outfilename, failstudentData);
 
 	case PASS:
-		return writeDataToFile(outfilename,allstudentData);
+		return writeDataToFile(outfilename, allstudentData);
 	}
 }
-bool writeDataToFile(const std::string outfilename,std::vector<studentData> data) {
+
+bool comp_name(const studentData &s1, const studentData &s2){
+	return s1.name<s2.name;
+}
+//any advantage to sorting high to low verses low to high?
+bool comp_classgrade(const studentData &s1, const studentData &s2){
+	return s1.classgrade>s2.classgrade;
+}
+bool sortArray(SORT_TYPE st) {
+	switch (st){
+	case NAME:
+		std::sort(allstudentData.begin(), allstudentData.end(), comp_name );
+		break;
+	case FINAL_GRADE:
+		std::sort(allstudentData.begin(), allstudentData.end(), comp_classgrade);	
+		break;
+	default:
+		//raise an error here
+		return false;
+	}
+	
+	return true;
+}
+
+bool writeDataToFile(const std::string outfilename,
+		std::vector<studentData> data) {
 	ofstream myfile;
 	myfile.open(outfilename.c_str());
 	if (!myfile.is_open())
@@ -109,11 +134,10 @@ bool writeDataToFile(const std::string outfilename,std::vector<studentData> data
 
 	string mydata;
 	for (int var = 0; var < data.size(); ++var) {
-		mydata = data[var].name + "  " +
-				DoubleToString(data[var].midterm) + "  " +
-				DoubleToString(data[var].final) + "  " +
-				DoubleToString(data[var].classgrade);
-		myfile<<mydata<<std::endl;
+		mydata = data[var].name + "  " + DoubleToString(data[var].midterm)
+				+ "  " + DoubleToString(data[var].final) + "  "
+				+ DoubleToString(data[var].classgrade);
+		myfile << mydata << std::endl;
 	}
 
 	if (myfile.is_open())
@@ -124,11 +148,11 @@ bool writeDataToFile(const std::string outfilename,std::vector<studentData> data
 
 //if you are debugging the file must be in the project parent directory
 //in this case Project2 with the .project and .cProject files
-std::string DoubleToString ( double Number ){
-     std::ostringstream ss;
-     ss << Number;
-     return ss.str();
-  }
+std::string DoubleToString(double Number) {
+	std::ostringstream ss;
+	ss << Number;
+	return ss.str();
+}
 
 //if myString does not contain a string rep of number returns o
 //if int not large enough has undefined behaviour, very fragile
