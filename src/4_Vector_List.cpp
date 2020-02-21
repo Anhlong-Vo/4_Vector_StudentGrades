@@ -58,11 +58,32 @@ int main() {
     return process_Data(infile,Passfile, Failfile);
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 //ALTERNATIVE- pass the files as arguments
 //const int FAIL_WRONG_NUMBER_ARGS = -5;
 //const int EXPECTED_NUMBER_ARGUMENTS =4;
 //const string WRONG_NUMB_ARGS = "This program expects 3 arguments, infile passfile failfile";
-
+//
 //int main( int argc, char *argv[] )  {
 //	//argc = how many arguments passed in (including this program)
 //	//char *argv[] char array of those arguments

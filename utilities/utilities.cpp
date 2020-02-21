@@ -15,14 +15,14 @@ using namespace std;
 vector<studentData> allstudentData;
 vector<studentData> failstudentData;
 
-bool readFileIntoVector(ifstream &file) {
+bool readFileIntoVector(ifstream &file, char char_to_search_for) {
 	bool retValue = true;	//assume best
 
 	std::string line;
 	std::string token;
 	studentData myStudentData;
 	stringstream ss;
-	const char CHAR_TO_SEARCH_FOR = ' ';
+
 
 	while (!file.eof()) {
 		getline(file, line); //get a line from the file Name, Midterm,Final
@@ -36,14 +36,14 @@ bool readFileIntoVector(ifstream &file) {
 		//!!!!!! be set to false, break out of loop, then return;	!!!!!!
 
 		//get the name
-		getline(ss, myStudentData.name, CHAR_TO_SEARCH_FOR);
+		getline(ss, myStudentData.name, char_to_search_for);
 
 		//get midterm
-		getline(ss, token, CHAR_TO_SEARCH_FOR);
+		getline(ss, token, char_to_search_for);
 		myStudentData.midterm = stringToInt(token.c_str());
 
 		//get final
-		getline(ss, token, CHAR_TO_SEARCH_FOR);
+		getline(ss, token, char_to_search_for);
 		myStudentData.final = stringToInt(token.c_str());
 
 		//finally add to array

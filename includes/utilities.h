@@ -9,6 +9,7 @@
 #define UTILITIES_H_
 
 #include <string>
+#include "../includes/constants.h"
 
 const double UNINITIALIZED = -1.0;
 struct studentData{
@@ -21,7 +22,7 @@ struct studentData{
 enum ranking {PASS,FAIL};
 enum SORT_TYPE{NAME,FINAL_GRADE};
 
-bool readFileIntoVector(std::ifstream &file );
+bool readFileIntoVector(std::ifstream &file, char char_to_search_for=CHAR_TO_SEARCH_FOR);
 void calculateFinalGrade();
 void extractFailingStudents(double failgrade = FAILGRADE);
 

@@ -9,6 +9,7 @@
 #define CONSTANTS_H_
 #include <string>
 
+const char 			CHAR_TO_SEARCH_FOR 				= ' ';
 
 const int 			USER_CHOSE_TO_EXIT 				= -1;
 const int 			COULD_NOT_OPEN_FILE				= -2;
@@ -20,7 +21,5 @@ const std::string 	PASS_FILE 						= "Pass.txt";
 const std::string 	FAIL_FILE 						= "Fail.txt";
 
 const double 		FAILGRADE 						= 60.0;
-
-
 
 #endif /* CONSTANTS_H_ */
